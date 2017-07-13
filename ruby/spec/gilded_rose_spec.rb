@@ -2,6 +2,9 @@
 require 'gilded_rose'
 
 describe GildedRose do
+  before(:each) do
+    sleep(0.1)
+  end
 
   describe "#update_quality on a normal_item" do
     it "does not change the name" do
@@ -38,6 +41,11 @@ describe GildedRose do
       items = [Item.new('bread', 0, 3)]
       GildedRose.new(items).update_quality_and_sell_in()
       expect(items[0].to_s).to eq "bread, -1, 1"
+    end
+    it 'if the sell_by date has hit 0 , quality changes by ' do
+      items = [Item.new('bread', -1, 3)]
+      GildedRose.new(items).update_quality_and_sell_in()
+      expect(items[0].to_s).to eq "bread, -2, 1"
     end
 
   end
@@ -160,9 +168,9 @@ describe GildedRose do
       expect(items[0].to_s).to eq "Backstage passes to a TAFKAL80ETC concert, 11, 21"
     end
     it 'if the sell_by date has hit 0 , quality changes by ' do
-      items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 3)]
+      items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 4)]
       GildedRose.new(items).update_quality_and_sell_in()
-      # expect(items[0].to_s).to eq "Backstage passes to a TAFKAL80ETC concert, -1, 0"
+      expect(items[0].to_s).to eq "Backstage passes to a TAFKAL80ETC concert, -1, 0"
     end
   end
 
